@@ -1,29 +1,20 @@
-const String apiKey = '4181D05C-EBD3-4986-93FD-584E30AB5BA9';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
-const String endPoint = 'https://rest.coinapi.io/';
+const String apiKey = '4181D05C-EBD3-4986-93FD-584E30AB5BA9';
+const String endPoint = 'rest.coinapi.io';
 
 const List<String> currenciesList = [
-  'AUD',
-  'BRL',
   'CAD',
   'CNY',
   'EUR',
   'GBP',
   'HKD',
   'IDR',
-  'ILS',
-  'INR',
   'JPY',
-  'MXN',
-  'NOK',
+  'KRW',
   'NZD',
-  'PLN',
-  'RON',
-  'RUB',
-  'SEK',
-  'SGD',
   'USD',
-  'ZAR'
 ];
 
 const List<String> cryptoList = [
@@ -32,4 +23,15 @@ const List<String> cryptoList = [
   'LTC',
 ];
 
-class CoinData {}
+class CoinData {
+  Future<dynamic> getRate(crypto, currency) async {
+    var url = Uri.https(endPoint, '/v1/exchangerate/$crypto/$currency');
+    var response = await http.get(url, headers: {"X-CoinAPI-Key": apiKey});
+    if (response.statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      return jsonResponse;
+    } else {
+      print(response.statusCode);
+    }
+  }
+}
